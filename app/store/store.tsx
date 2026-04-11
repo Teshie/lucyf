@@ -135,7 +135,7 @@ const API_BASE =
   (typeof window !== "undefined" &&
     (process.env.NEXT_PUBLIC_HTTP_API ||
       `${window.location.protocol}//${window.location.host}`)) ||
-  "https://topb.tabia.site";
+  "https://lucyb.tabia.site";
 
 const LSK_ROOM_ID = "arada.currentRoomId";
 const LSK_WS_URL = "arada.currentRoomWS";
@@ -174,9 +174,7 @@ function extractWalletBalanceFromRoomPayload(
 
   if (hasBirrPair) {
     const a = parseNumberLoose(room.balance_birr ?? room.balance);
-    const b = parseNumberLoose(
-      room.main_balance_birr ?? room.main_balance
-    );
+    const b = parseNumberLoose(room.main_balance_birr ?? room.main_balance);
     return a + b;
   }
 
@@ -708,7 +706,6 @@ export const CounterProvider = ({ children }: { children: ReactNode }) => {
     send({ action: "claim", board_number: null });
   };
 
-
   // Clear a specific board slot
   const clearBoard = (slot: 1 | 2) => {
     const s = wsRef.current;
@@ -731,21 +728,20 @@ export const CounterProvider = ({ children }: { children: ReactNode }) => {
   const leaveGameWithZero = () => {
     const s = wsRef.current;
     if (!s || s.readyState !== WebSocket.OPEN) return;
-  
+
     // Send leave action FIRST to trigger refund
     s.send(JSON.stringify({ action: "leave" }));
-  
-  
+
     // Optimistic local clear
     setUserBoard(null);
     setUserBoard2(null);
     setBoardNumberState(0);
     setBoardNumber2State(0);
-  
+
     try {
       s.close();
     } catch {}
-  
+
     try {
       localStorage.removeItem(LSK_ROOM_ID);
       localStorage.removeItem(LSK_WS_URL);

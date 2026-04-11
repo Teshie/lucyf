@@ -50,8 +50,8 @@ function decodeJwtPayload<T = any>(token?: string | null): T | null {
 
 /* -------------------- Component -------------------- */
 const RELOAD_FLAG = "bingo_initial_reload_done";
-const ROOMS_WS = "wss://topb.tabia.site";
-const WS_BASE = "wss://topb.tabia.site";
+const ROOMS_WS = "wss://lucyb.tabia.site";
+const WS_BASE = "wss://lucyb.tabia.site";
 
 const BingoBoard: React.FC = () => {
   const router = useRouter();
@@ -164,9 +164,7 @@ const BingoBoard: React.FC = () => {
       : String(balance);
 
   return (
-    <div
-      className="flex min-h-[100dvh] w-full flex-col overflow-x-hidden bg-[#C3A9D8] pl-[max(0.75rem,env(safe-area-inset-left))] pr-[max(0.75rem,env(safe-area-inset-right))] pb-[max(0.35rem,env(safe-area-inset-bottom))] pt-[max(0.5rem,env(safe-area-inset-top))] font-sans text-sm text-[#312E81]"
-    >
+    <div className="flex min-h-[100dvh] w-full flex-col overflow-x-hidden bg-[#C3A9D8] pl-[max(0.75rem,env(safe-area-inset-left))] pr-[max(0.75rem,env(safe-area-inset-right))] pb-[max(0.35rem,env(safe-area-inset-bottom))] pt-[max(0.5rem,env(safe-area-inset-top))] font-sans text-sm text-[#312E81]">
       <header className="mx-auto mb-2 w-full max-w-lg shrink-0">
         <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
           <div className="flex min-h-[2.65rem] flex-col justify-center gap-0 rounded-md border border-[#B39BC9] bg-white px-2 py-1.5 shadow-sm sm:min-h-[2.95rem] sm:px-2.5">
@@ -283,10 +281,10 @@ const BingoBoard: React.FC = () => {
                             isPlaying
                               ? "font-medium text-[#312E81]/55"
                               : remaining > 0
-                                ? "font-bold tabular-nums text-[#EA580C]"
-                                : lowBalance
-                                  ? "font-medium text-red-700"
-                                  : "font-medium text-[#312E81]"
+                              ? "font-bold tabular-nums text-[#EA580C]"
+                              : lowBalance
+                              ? "font-medium text-red-700"
+                              : "font-medium text-[#312E81]"
                           }
                         >
                           {statusLabel}
@@ -295,7 +293,9 @@ const BingoBoard: React.FC = () => {
                           {item.number_of_players}
                         </div>
                         <div className="tabular-nums text-[#312E81]">
-                          {(item.possible_win_cents / 100 || 0).toLocaleString()}{" "}
+                          {(
+                            item.possible_win_cents / 100 || 0
+                          ).toLocaleString()}{" "}
                           ETB
                         </div>
                         <div className="flex justify-center">
@@ -310,7 +310,9 @@ const BingoBoard: React.FC = () => {
 
                               setSockUrl(wsUrl);
                               router.push(
-                                `/board?room=${encodeURIComponent(item.room_id)}`
+                                `/board?room=${encodeURIComponent(
+                                  item.room_id
+                                )}`
                               );
                             }}
                             className={`rounded-md px-2.5 py-1.5 text-xs font-bold shadow-sm sm:px-3.5 sm:py-2 sm:text-sm ${
@@ -332,7 +334,7 @@ const BingoBoard: React.FC = () => {
       </div>
 
       <p className="shrink-0 py-1 text-center text-[10px] text-white/85 sm:text-xs">
-        © Top Bingo 2025
+        © Lucy Bingo 2025
       </p>
     </div>
   );

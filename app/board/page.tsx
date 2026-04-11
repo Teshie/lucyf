@@ -131,7 +131,10 @@ const BingoBoard: React.FC<BingoBoardProps> = ({}) => {
       .get("/me", { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => setMeProfile(res.data as MePayload))
       .catch((err) => {
-        console.warn("GET /me (board page):", err?.response?.data || err?.message);
+        console.warn(
+          "GET /me (board page):",
+          err?.response?.data || err?.message
+        );
       });
   }, []);
 
@@ -231,8 +234,7 @@ const BingoBoard: React.FC<BingoBoardProps> = ({}) => {
     if (cantPlay || selectedBoards.length === 0) return;
 
     const status = roomHeaderData?.status;
-    const goAtOne =
-      status === "about_to_start" && secondsLeft === 1;
+    const goAtOne = status === "about_to_start" && secondsLeft === 1;
     const alreadyPlaying = status === "playing";
 
     if (!(goAtOne || alreadyPlaying)) return;
@@ -270,8 +272,7 @@ const BingoBoard: React.FC<BingoBoardProps> = ({}) => {
     selectedBoards.forEach((n) => mergedMine.add(n));
     if (userBoard != null && userBoard >= 1) mergedMine.add(userBoard);
     if (userBoard2 != null && userBoard2 >= 1) mergedMine.add(userBoard2);
-    const atMaxSelection =
-      mergedMine.size >= 2 && !mergedMine.has(boardNumber);
+    const atMaxSelection = mergedMine.size >= 2 && !mergedMine.has(boardNumber);
 
     /* Selected cartelas are fixed — no second click to deselect. */
     const isDisabled = Boolean(
@@ -302,12 +303,12 @@ const BingoBoard: React.FC<BingoBoardProps> = ({}) => {
             ? isOccupiedInRoom && !isMine
               ? "Board already taken"
               : isMine
-                ? selectionIndex >= 0
-                  ? `Selected as board ${selectionIndex + 1}`
-                  : "Your cartela"
-                : atMaxSelection
-                  ? "You already have two boards"
-                  : "Board already taken"
+              ? selectionIndex >= 0
+                ? `Selected as board ${selectionIndex + 1}`
+                : "Your cartela"
+              : atMaxSelection
+              ? "You already have two boards"
+              : "Board already taken"
             : "Select board"
         }
       >
@@ -317,8 +318,8 @@ const BingoBoard: React.FC<BingoBoardProps> = ({}) => {
             {selectionIndex >= 0
               ? selectionIndex + 1
               : userBoard === boardNumber
-                ? 1
-                : 2}
+              ? 1
+              : 2}
           </span>
         )}
       </button>
@@ -331,22 +332,19 @@ const BingoBoard: React.FC<BingoBoardProps> = ({}) => {
       ? effectiveWalletBalance.toLocaleString()
       : "—";
   const walletLine =
-    userBalanceDisplay === "—"
-      ? "—"
-      : `${userBalanceDisplay} ETB`;
+    userBalanceDisplay === "—" ? "—" : `${userBalanceDisplay} ETB`;
   const stakeDisplay =
     roomHeaderData?.stake_amount != null &&
     !Number.isNaN(Number(roomHeaderData.stake_amount))
       ? String(roomHeaderData.stake_amount)
       : "—";
-  const stakeLine =
-    stakeDisplay === "—" ? "—" : `${stakeDisplay} ETB`;
+  const stakeLine = stakeDisplay === "—" ? "—" : `${stakeDisplay} ETB`;
   /** Seconds until start (from room `start_time`); 0 while the round is playing. */
   const countdownDisplay = playing
     ? "0"
     : secondsLeft > 0
-      ? String(secondsLeft)
-      : "—";
+    ? String(secondsLeft)
+    : "—";
 
   return (
     <div className="flex h-[100dvh] max-h-[100dvh] w-full flex-col overflow-hidden bg-[#C3A9D8] pl-[max(0.75rem,env(safe-area-inset-left))] pr-[max(0.75rem,env(safe-area-inset-right))] pb-[max(0.35rem,env(safe-area-inset-bottom))] pt-[max(0.5rem,env(safe-area-inset-top))] font-sans">
@@ -386,9 +384,7 @@ const BingoBoard: React.FC<BingoBoardProps> = ({}) => {
           className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-white/80 sm:rounded-xl"
           aria-label="Cartela numbers"
         >
-          <div
-            className="no-scrollbar min-h-0 flex-1 overflow-y-auto overscroll-y-contain p-1.5 [-webkit-overflow-scrolling:touch] sm:p-2"
-          >
+          <div className="no-scrollbar min-h-0 flex-1 overflow-y-auto overscroll-y-contain p-1.5 [-webkit-overflow-scrolling:touch] sm:p-2">
             <div className="grid grid-cols-9 gap-1 sm:gap-1.5">
               {boards.map((_, i) => renderCartelaButton(i + 1))}
             </div>
@@ -397,7 +393,7 @@ const BingoBoard: React.FC<BingoBoardProps> = ({}) => {
       </div>
 
       <p className="shrink-0 py-1 text-center text-[10px] text-white/85 sm:text-xs">
-        © Top Bingo 2024
+        © Lucy Bingo 2024
       </p>
     </div>
   );
