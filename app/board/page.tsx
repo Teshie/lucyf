@@ -224,9 +224,16 @@ const BingoBoard: React.FC<BingoBoardProps> = ({}) => {
     const next = computeNextSelection(prev, boardNumber);
     if (selectionsEqual(prev, next)) return;
 
+    const wasSelected = prev.includes(boardNumber);
+    const nowSelected = next.includes(boardNumber);
+
     syncBoardsToServer(prev, next, boardNumber, boardApi);
     selectedBoardsRef.current = next;
     setSelectedBoards(next);
+
+    if (!wasSelected && nowSelected) {
+      router.push("/game");
+    }
   };
 
   /** Auto-enter game when pre-game countdown shows 1s, or when the round is already playing. */

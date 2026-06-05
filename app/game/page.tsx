@@ -79,6 +79,10 @@ const GamePage: React.FC = () => {
     roomHeaderData?.status ?? ""
   );
 
+  const canLeave =
+    roomHeaderData?.status !== "playing" &&
+    roomHeaderData?.status !== "claimed";
+
   const [token, setToken] = useState<string | null>(null);
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -483,7 +487,7 @@ const GamePage: React.FC = () => {
         <button
           type="button"
           onClick={handleLeave}
-          disabled={calledNumbers?.length > 0}
+          disabled={!canLeave}
           className="text-sm font-semibold text-[#312E81] underline decoration-[#7E22CE] underline-offset-2 disabled:cursor-not-allowed disabled:opacity-45"
         >
           Leave
