@@ -310,7 +310,7 @@ const BingoBoard: React.FC<BingoBoardProps> = ({}) => {
         </button>
         <button
           type="button"
-          disabled={playing || selectedBoards.length === 0 || isWaiting}
+          disabled={playing || isWaiting}
           onClick={handleStartGameClick}
           className="flex-1 rounded-full bg-[#FF9F43] px-4 py-2.5 text-sm font-bold text-gray-900 shadow-sm ring-1 ring-black/10 active:opacity-90 disabled:cursor-not-allowed disabled:opacity-60 sm:py-2"
         >
