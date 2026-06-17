@@ -334,7 +334,7 @@ const BingoBoard: React.FC = () => {
       </div>
 
       <p className="shrink-0 py-1 text-center text-[10px] text-white/85 sm:text-xs">
-        © Sisay Bingo 2025
+        © Sisay Mito Bingo 2025
       </p>
     </div>
   );

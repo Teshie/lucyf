@@ -321,7 +321,7 @@ const BingoBoard: React.FC<BingoBoardProps> = ({}) => {
       <div className="min-h-0 flex-1" aria-hidden />
 
       <p className="shrink-0 py-1 text-center text-[10px] text-white/85 sm:text-xs">
-        © Top Bingo 2024
+        © Sisay Mito Bingo 2024
       </p>
     </div>
   );
