@@ -9,6 +9,10 @@ import { useRouter } from "next/navigation";
 import NotifyBoard from "../components/NotifyBoard";
 import toast from "react-hot-toast";
 import { useBingoVoice } from "../hooks/useBingoVoice";
+import ManualAutoToggle from "../components/ManualAutoToggle";
+import { hasAnyBingo } from "../utils/checkBingo";
+
+const LSK_AUTO_CLAIM = "arada.bingoAutoMode";
 
 function SpeakerOnIcon({ className }: { className?: string }) {
   return (
@@ -194,6 +198,54 @@ const GamePage: React.FC = () => {
 
   const [markedNumbers, setMarkedNumbers] = useState<number[]>([]);
 
+  const [isAutoMode, setIsAutoMode] = useState(false);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsAutoMode(localStorage.getItem(LSK_AUTO_CLAIM) === "1");
+    }
+  }, []);
+
+  const handleAutoModeChange = (auto: boolean) => {
+    setIsAutoMode(auto);
+    try {
+      localStorage.setItem(LSK_AUTO_CLAIM, auto ? "1" : "0");
+    } catch {}
+  };
+
+  const secondCartelaId =
+    userBoard2 ?? finalGameDetails?.user_board_number_2 ?? null;
+
+  const autoClaimedRef = useRef(false);
+  useEffect(() => {
+    if (roomHeaderData?.status !== "playing") {
+      autoClaimedRef.current = false;
+    }
+  }, [roomHeaderData?.status, roomHeaderData?.room_id]);
+
+  useEffect(() => {
+    if (!isAutoMode) return;
+    if (roomHeaderData?.status !== "playing") return;
+    if (autoClaimedRef.current) return;
+    if (!calledNumbers || calledNumbers.length <= 3) return;
+
+    const boardNums = [
+      userBoard ?? finalGameDetails?.user_board_number,
+      secondCartelaId,
+    ];
+    if (hasAnyBingo(boardNums, calledNumbers)) {
+      autoClaimedRef.current = true;
+      claimBingo();
+    }
+  }, [
+    isAutoMode,
+    calledNumbers,
+    roomHeaderData?.status,
+    userBoard,
+    finalGameDetails?.user_board_number,
+    secondCartelaId,
+    claimBingo,
+  ]);
+
   // Toggle mark for a number (shared across both boards)
   const handleNumberToggle = (num: number) => {
     setMarkedNumbers((prev) =>
@@ -218,8 +270,6 @@ const GamePage: React.FC = () => {
     isUserInteracted: voiceEnabled,
   } = useBingoVoice(calledNumbers);
 
-  const secondCartelaId =
-    userBoard2 ?? finalGameDetails?.user_board_number_2 ?? null;
   const hasSecondCartela =
     secondCartelaId != null && Number(secondCartelaId) > 0;
 
@@ -412,6 +462,10 @@ const GamePage: React.FC = () => {
               timeLeft={secondsLeft}
               status={roomHeaderData?.status}
             />
+            <ManualAutoToggle
+              isAuto={isAutoMode}
+              onChange={handleAutoModeChange}
+            />
           </div>
 
           {/* Board 1 - Show actual board or placeholder */}
@@ -475,11 +529,15 @@ const GamePage: React.FC = () => {
       <div className="mt-2 flex w-full min-w-0 shrink-0 pb-1 font-sans sm:gap-2">
         <button
           type="button"
-          disabled={calledNumbers?.length <= 3}
+          disabled={
+            isAutoMode ||
+            calledNumbers?.length <= 3 ||
+            roomHeaderData?.status !== "playing"
+          }
           onClick={claimBingo}
           className="flex min-h-[3rem] min-w-0 w-full items-center justify-center rounded-xl bg-[#F4A460] px-2 py-3 text-sm font-bold text-white shadow-sm transition-opacity disabled:cursor-not-allowed disabled:opacity-50 active:opacity-90 sm:min-h-[3.25rem] sm:py-3.5 sm:text-base md:text-lg"
         >
-          BINGO!
+          {isAutoMode ? "AUTO" : "BINGO!"}
         </button>
       </div>
 
