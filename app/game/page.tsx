@@ -10,7 +10,7 @@ import NotifyBoard from "../components/NotifyBoard";
 import toast from "react-hot-toast";
 import { useBingoVoice } from "../hooks/useBingoVoice";
 import ManualAutoToggle from "../components/ManualAutoToggle";
-import { hasAnyBingo } from "../utils/checkBingo";
+import { getAutoMarkedNumbers, hasAnyBingo } from "../utils/checkBingo";
 
 const LSK_AUTO_CLAIM = "arada.bingoAutoMode";
 
