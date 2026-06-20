@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import BingoBoard from "../components/BingoBoard";
 import CurrentCall from "../components/CurrentCall";
 import PlayerBoard from "../components/PlayerBoard";
@@ -273,6 +273,21 @@ const GamePage: React.FC = () => {
   const hasSecondCartela =
     secondCartelaId != null && Number(secondCartelaId) > 0;
 
+  const primaryBoardId =
+    userBoard ?? finalGameDetails?.user_board_number ?? null;
+
+  const playerBoardIds = useMemo(
+    () => [primaryBoardId, secondCartelaId],
+    [primaryBoardId, secondCartelaId]
+  );
+
+  const autoMarkedNumbers = useMemo(
+    () => getAutoMarkedNumbers(playerBoardIds, calledNumbers ?? []),
+    [playerBoardIds, calledNumbers]
+  );
+
+  const displayMarkedNumbers = isAutoMode ? autoMarkedNumbers : markedNumbers;
+
   return (
     <div
       className="main flex min-h-[100dvh] w-full max-w-[100vw] flex-col overflow-x-hidden pl-[max(0.5rem,env(safe-area-inset-left))] pr-[max(0.5rem,env(safe-area-inset-right))] pb-[max(0.25rem,env(safe-area-inset-bottom))] pt-[max(0.25rem,env(safe-area-inset-top))] font-mono antialiased [-webkit-tap-highlight-color:transparent] [touch-action:manipulation]"
@@ -472,12 +487,11 @@ const GamePage: React.FC = () => {
           <div className="">
             {true ? (
               <PlayerBoard
-                userBoard={
-                  userBoard ?? finalGameDetails?.user_board_number ?? null
-                }
-                markedNumbers={markedNumbers}
+                userBoard={primaryBoardId}
+                markedNumbers={displayMarkedNumbers}
                 calledNumbers={calledNumbers}
-                onNumberClick={handleNumberToggle}
+                onNumberClick={isAutoMode ? undefined : handleNumberToggle}
+                readOnly={isAutoMode}
               />
             ) : (
               <div className="w-full boadr-main rounded-lg text-center ">
@@ -512,9 +526,10 @@ const GamePage: React.FC = () => {
             {hasSecondCartela ? (
               <PlayerBoard
                 userBoard={secondCartelaId}
-                markedNumbers={markedNumbers}
+                markedNumbers={displayMarkedNumbers}
                 calledNumbers={calledNumbers}
-                onNumberClick={handleNumberToggle}
+                onNumberClick={isAutoMode ? undefined : handleNumberToggle}
+                readOnly={isAutoMode}
               />
             ) : (
               <PlayerBoard

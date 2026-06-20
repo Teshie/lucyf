@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import * as Switch from "@radix-ui/react-switch";
 
 interface ManualAutoToggleProps {
   isAuto: boolean;
@@ -12,37 +13,32 @@ const ManualAutoToggle: React.FC<ManualAutoToggleProps> = ({
   onChange,
 }) => {
   return (
-    <div className="flex items-center justify-center gap-2.5 py-1 sm:py-1.5">
-      <span
-        className={`text-xs font-semibold sm:text-sm ${
-          !isAuto ? "text-white" : "text-white/40"
+    <div className="flex items-center justify-center gap-3 py-1.5 sm:py-2">
+      <label
+        htmlFor="bingo-mode-switch"
+        className={`cursor-pointer select-none text-sm font-semibold transition-colors ${
+          !isAuto ? "text-white" : "text-white/45"
         }`}
       >
         Manual
-      </span>
-      <button
-        type="button"
-        role="switch"
-        aria-checked={isAuto}
-        aria-label={isAuto ? "Auto claim enabled" : "Manual claim enabled"}
-        onClick={() => onChange(!isAuto)}
-        className={`relative h-7 w-[3.25rem] shrink-0 rounded-full transition-colors duration-200 ${
-          isAuto ? "bg-[#16A34A]" : "bg-white/25"
-        }`}
+      </label>
+      <Switch.Root
+        id="bingo-mode-switch"
+        checked={isAuto}
+        onCheckedChange={onChange}
+        className="relative h-[1.625rem] w-[2.875rem] shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-white/30 outline-none transition-colors duration-200 data-[state=checked]:bg-[#16A34A] focus-visible:ring-2 focus-visible:ring-[#16A34A] focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+        aria-label="Toggle between manual and auto bingo mode"
       >
-        <span
-          className={`absolute top-0.5 size-6 rounded-full bg-white shadow transition-transform duration-200 ${
-            isAuto ? "translate-x-[calc(3.25rem-1.625rem)]" : "translate-x-0.5"
-          }`}
-        />
-      </button>
-      <span
-        className={`text-xs font-semibold sm:text-sm ${
-          isAuto ? "text-white" : "text-white/40"
+        <Switch.Thumb className="block size-[1.375rem] translate-x-0.5 rounded-full bg-white shadow-md transition-transform duration-200 will-change-transform data-[state=checked]:translate-x-[1.375rem]" />
+      </Switch.Root>
+      <label
+        htmlFor="bingo-mode-switch"
+        className={`cursor-pointer select-none text-sm font-semibold transition-colors ${
+          isAuto ? "text-white" : "text-white/45"
         }`}
       >
         Auto
-      </span>
+      </label>
     </div>
   );
 };

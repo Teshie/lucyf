@@ -50,3 +50,29 @@ export function hasAnyBingo(
     (bno) => bno != null && bno > 0 && checkBoardBingo(bno, called)
   );
 }
+
+/** Numbers on the player's cartelas that have been called (for auto-marking). */
+export function getAutoMarkedNumbers(
+  boardNumbers: (number | null | undefined)[],
+  called: number[]
+): number[] {
+  if (!called.length) return [];
+
+  const calledSet = new Set(called);
+  const marked = new Set<number>();
+
+  for (const bno of boardNumbers) {
+    if (bno == null || bno <= 0) continue;
+    const board = (boards as BoardGrid[])[bno - 1];
+    if (!board) continue;
+    for (const row of board) {
+      for (const cell of row) {
+        if (typeof cell === "number" && calledSet.has(cell)) {
+          marked.add(cell);
+        }
+      }
+    }
+  }
+
+  return Array.from(marked);
+}
